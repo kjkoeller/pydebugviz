@@ -13,10 +13,10 @@ authors = [
   { name="Kyle Koeller" }
 ]
 dependencies = [
-  "pandas>=2.2",
+  "pandas>=1.4.2",
   "ipywidgets>=8.1",
   "networkx>=3.2",
-  "matplotlib>=3.8"
+  "matplotlib>=3.5.1"
 ]
 
 [project.urls]
