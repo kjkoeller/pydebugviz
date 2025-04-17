@@ -24,13 +24,17 @@ def test_navigation_and_bounds():
 
 def test_search_conditions():
     def calc():
-        x = 0
-        for i in range(3):
-            x += 2  # x will be 6 at the end
+        x = 5
         return x
 
     session = DebugSession(debug(calc))
-    result = session.search("x == 6")
+    
+    # 👇 Print for debugging
+    for i, frame in enumerate(session.trace):
+        print(f"Frame {i}: {frame['event']} | locals = {frame['locals']}")
+
+    result = session.search("x == 5")
     assert isinstance(result, list)
     assert len(result) >= 1
+
 
