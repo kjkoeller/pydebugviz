@@ -1,4 +1,4 @@
-import os. tempfile
+import os, tempfile
 from pydebugviz import debug
 from pydebugviz.export import export_html
 
