@@ -24,10 +24,13 @@ def test_navigation_and_bounds():
 
 def test_search_conditions():
     def calc():
-        x = 5
+        x = 0
+        for i in range(3):
+            x += 2  # x will be 6 at the end
         return x
 
     session = DebugSession(debug(calc))
-    result = session.search("x == 5")
+    result = session.search("x == 6")
     assert isinstance(result, list)
-    assert len(result) >= 1  # this will now pass
+    assert len(result) >= 1
+
