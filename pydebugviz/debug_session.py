@@ -29,14 +29,19 @@ class DebugSession:
         return self.current()
 
     def search(self, condition: str) -> List[int]:
-        matches = []
-        for i, frame in enumerate(self.trace):
-            context = frame.get("locals", {}).copy()
-            if "return" in frame:
-                context["return"] = frame["return"]
-            if safe_eval(condition, context):
-                matches.append(i)
-        return matches
+    matches = []
+    for i, frame in enumerate(self.trace):
+        context = frame.get("locals", {}).copy()
+
+        # Try to cast numeric strings to ints
+        for k, v in context.items():
+            if isinstance(v, str) and v.isdigit():
+                context[k] = int(v)
+
+        if safe_eval(condition, context):
+            matches.append(i)
+    return matches
+
 
     def show_summary(self, fields: Optional[List[str]] = None):
         fields = fields or ["step", "event", "function", "line_no"]
