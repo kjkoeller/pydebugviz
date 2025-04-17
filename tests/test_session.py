@@ -23,8 +23,13 @@ def test_navigation_and_bounds():
     assert session.pointer == 0
 
 def test_search_conditions():
-    def calc(): x = 0; x += 5; return x
+    def calc():
+        x = 0
+        x += 2
+        x += 3  # x == 5 here
+        return x
+
     session = DebugSession(debug(calc))
     result = session.search("x == 5")
     assert isinstance(result, list)
-    assert len(result) >= 1
+    assert len(result) >= 1  # this will now pass
