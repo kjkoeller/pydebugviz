@@ -1,29 +1,3 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
-setup(
-    name="pydebugviz",
-    version="1.0.1",
-    description="Time-travel debugger and visualization toolkit for Python",
-    long_description=open("README.md").read(),
-    long_description_content_type="text/markdown",
-    author="Kyle Koeller",
-    # author_email="you@example.com",
-    url="https://github.com/kjkoeller/pydebugviz",
-    packages=find_packages(),
-    install_requires=[
-        "pandas>=1.4.2",
-        "ipywidgets>=8.1",
-        "networkx>=3.0",
-        "matplotlib>=3.5.1"
-    ],
-    python_requires=">=3.7",
-    classifiers=[
-        "Development Status :: 5 - Production/Stable",
-        "Intended Audience :: Developers",
-        "Topic :: Software Development :: Debuggers",
-        "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3",
-    ],
-    include_package_data=True,
-    zip_safe=False,
-)
+setup()
