@@ -1,3 +1,24 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "pydebugviz"
+version = "1.0.0"
+description = "Time-travel debugger and visualization toolkit for Python"
+readme = "README.md"
+requires-python = ">=3.7"
+license = {text = "MIT"}
+authors = [
+  { name="Kyle Koeller" }
+]
+dependencies = [
+  "pandas>=2.2",
+  "ipywidgets>=8.1",
+  "networkx>=3.2",
+  "matplotlib>=3.8"
+]
+
+[project.urls]
+Homepage = "https://github.com/kjkoeller/pydebugviz"
+Documentation = "https://github.com/kjkoeller/pydebugviz"

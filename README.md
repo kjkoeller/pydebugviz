@@ -1,20 +1,23 @@
-# pydebugviz v1.5
+# pydebugviz v1.6.0
 
-**Visual Time Travel Debugger for Python**  
-Enhanced with trace validation, better error handling, and structured APIs.
+**Visual Time-Travel Debugging for Python**  
+Trace everything. Watch everything. Export everything.
 
 ---
 
-## Key Features
+## Overview
 
-- Time-travel debugging
-- Step-by-step trace with locals
-- Visual summary (Jupyter or CLI)
-- Live variable capture
-- Function call graphs
-- Smart breakpoints and variable watch
-- 🔒 **NEW**: Trace structure validation (auto-enabled)
-- 🧠 Built-in `debug()` function with safer evaluation
+`pydebugviz` captures your Python function’s execution step-by-step and lets you explore it in:
+- **Jupyter**
+- **Terminal (CLI)**
+- **IDEs**
+
+Now in v1.6.0:
+- ✅ `DebugSession` interactive navigator
+- ✅ `live_watch()` for real-time variable display
+- ✅ `show_summary()` for CLI/Jupyter-friendly overview
+- ✅ `export_html()` for trace visualization
+- ✅ Validation tools, safe evaluation, and large var protection
 
 ---
 
@@ -26,57 +29,97 @@ pip install pydebugviz
 
 ---
 
-## What's New in v1.5
+## Feature Matrix
 
-- ✅ Built-in trace validation via `validate_trace()`
-- ✅ Updated `debug(..., validate=True)` for safety checks
-- ✅ Improved trace schema consistency
-- ✅ Future-ready for file export and metadata
+| Feature             | Jupyter | CLI | IDE |
+|---------------------|---------|-----|-----|
+| `debug()`           | ✅      | ✅  | ✅  |
+| `DebugSession`      | ✅      | ✅  | ✅  |
+| `show_summary()`    | ✅      | ✅  | ✅  |
+| `export_html()`     | ✅      | ✅  | ✅  |
+| `live_watch()`      | ✅      | ✅  | ✅  |
+| `validate_trace()`  | ✅      | ✅  | ✅  |
 
 ---
 
-## Sample Usage
+## Quick Start
 
 ```python
-from pydebugviz import debug
+from pydebugviz import debug, show_summary
 
-def test_func():
+def test():
     x = 0
-    for i in range(5):
+    for i in range(4):
         x += i
     return x
 
-trace = debug(test_func, breakpoints=["x > 5"], validate=True)
+trace = debug(test, breakpoints=["x > 3"], max_steps=100)
+show_summary(trace)
 ```
 
 ---
 
-## Trace Validation
+## Interactive DebugSession
 
-All trace frames must include:
-- `"event"`: `"line"`, `"call"`, `"return"`, `"exception"`
-- `"function"`: function name
-- `"line_no"`: int
-- `"locals"`: dict
+```python
+from pydebugviz import DebugSession
 
-Automatically checked in `debug()` with `validate=True`.
+session = DebugSession(trace)
+session.jump_to(3)
+print(session.current())
+session.show_summary()
+```
 
 ---
 
-## Environment Support
+## Live Watch Mode
 
-| Feature                | CLI | Jupyter | IDE |
-|------------------------|-----|---------|-----|
-| `debug()`              | ✅  | ✅      | ✅  |
-| `validate_trace()`     | ✅  | ✅      | ✅  |
-| `show_summary()`       | ✅  | ✅      | ⚠️  |
-| `export_html()`        | ✅  | ✅      | ✅  |
-| `live_watch()`         | ✅  | ✅      | ✅  |
-| `DebugSession` object  | ✅  | ✅      | ✅  |
+```python
+from pydebugviz import live_watch
+
+def my_function():
+    x = 1
+    for i in range(3): x += i
+
+live_watch(my_function, watch=["x", "i"], interval=0.1)
+```
+
+---
+
+## Export HTML
+
+```python
+from pydebugviz import export_html
+
+export_html(trace, filepath="trace_output.html")
+```
+
+---
+
+## Validation + Safe Eval
+
+```python
+from pydebugviz import validate_expressions, safe_eval
+
+print(validate_expressions(["x > 3", "bad =="]))   # syntax check
+print(safe_eval("x > 5", {"x": 7}))                # safely evaluate
+```
+
+---
+
+## Trace Schema Enforcement
+
+```python
+from pydebugviz import normalize_trace, check_trace_schema
+
+normalized = normalize_trace(trace)
+issues = check_trace_schema(normalized)
+print("Schema issues:", issues)
+```
 
 ---
 
 ## License
 
-MIT License © 2025  
-Built for developers who debug with style.
+MIT License  
+(c) 2025 pydebugviz contributors
