@@ -8,12 +8,6 @@ def debug(func, *args,
           max_steps: int = 10000,
           max_var_len: int = 100,
           **kwargs) -> List[Dict]:
-    """
-    Main debug function that supports:
-    - breakpoints with syntax checking
-    - truncation of large variable outputs
-    - max step protection to prevent runaway traces
-    """
     import sys
 
     trace = []
@@ -33,13 +27,14 @@ def debug(func, *args,
             return None
         step_count += 1
 
+        raw_locals = frame.f_locals.copy()
         frame_data = {
             "event": event,
             "function": frame.f_code.co_name,
             "line_no": frame.f_lineno,
-            "locals": truncate_vars(frame.f_locals.copy(), max_len=max_var_len)
+            "locals": truncate_vars(raw_locals, max_len=max_var_len),
+            "raw_locals": raw_locals  # 👈 NEW: for accurate search
         }
-
         if event == "return":
             try:
                 frame_data["return"] = str(arg)
