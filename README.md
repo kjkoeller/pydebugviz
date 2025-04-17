@@ -1,4 +1,4 @@
-# pydebugviz v1.6.0
+# pydebugviz v1.0.0
 
 **Visual Time-Travel Debugging for Python**  
 Trace everything. Watch everything. Export everything.
