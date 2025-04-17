@@ -1,4 +1,8 @@
-# pydebugviz v1.0.0
+[![Python OS 3.8, 3.9, 3.10](https://github.com/kjkoeller/pydebugviz/actions/workflows/ci_tests.yml/badge.svg)](https://github.com/kjkoeller/pydebugviz/actions/workflows/ci_tests.yml)
+[![PyPI version](https://badge.fury.io/py/pydebugviz.svg)](https://badge.fury.io/py/pydebugviz)
+[![GitHub release](https://img.shields.io/github/v/release/kjkoeller/pydebugviz)](https://github.com/kjkoeller/pydebugviz/releases/)
+
+# pydebugviz
 
 **Visual Time-Travel Debugging for Python**  
 Trace everything. Watch everything. Export everything.
