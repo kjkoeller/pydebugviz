@@ -12,7 +12,7 @@ Trace everything. Watch everything. Export everything.
 - **Terminal (CLI)**
 - **IDEs**
 
-Now in v1.6.0:
+Now in v1.0.0:
 - ✅ `DebugSession` interactive navigator
 - ✅ `live_watch()` for real-time variable display
 - ✅ `show_summary()` for CLI/Jupyter-friendly overview
