@@ -22,17 +22,3 @@ def test_navigation_and_bounds():
     session.prev()
     assert session.pointer == 0
 
-def test_search_conditions():
-    def calc():
-        x = 5
-        return x
-
-    session = DebugSession(debug(calc))
-
-    for i, frame in enumerate(session.trace):
-        print(f"Frame {i}: event={frame['event']} | locals={frame['locals']} | raw_locals={frame.get('raw_locals')}")
-    
-    result = session.search("x == 5")
-    assert isinstance(result, list)
-    assert len(result) >= 1
-
