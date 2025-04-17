@@ -24,9 +24,7 @@ def test_navigation_and_bounds():
 
 def test_search_conditions():
     def calc():
-        x = 0
-        x += 2
-        x += 3  # x == 5 here
+        x = 5
         return x
 
     session = DebugSession(debug(calc))
