@@ -28,13 +28,11 @@ def test_search_conditions():
         return x
 
     session = DebugSession(debug(calc))
-    
-    # 👇 Print for debugging
-    for i, frame in enumerate(session.trace):
-        print(f"Frame {i}: {frame['event']} | locals = {frame['locals']}")
 
+    for i, frame in enumerate(session.trace):
+        print(f"Frame {i}: event={frame['event']} | locals={frame['locals']} | raw_locals={frame.get('raw_locals')}")
+    
     result = session.search("x == 5")
     assert isinstance(result, list)
     assert len(result) >= 1
-
 
