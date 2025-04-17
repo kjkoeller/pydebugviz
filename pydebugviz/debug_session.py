@@ -29,8 +29,12 @@ class DebugSession:
         return self.current()
 
     def search(self, condition: str) -> List[int]:
-        return [i for i, frame in enumerate(self.trace)
-                if safe_eval(condition, frame.get("locals", {}))]
+        matches = []
+        for i, frame in enumerate(self.trace):
+            context = frame.get("raw_locals", {})
+            if safe_eval(condition, context):
+                matches.append(i)
+        return matches
 
     def show_summary(self, fields: Optional[List[str]] = None):
         fields = fields or ["step", "event", "function", "line_no"]
