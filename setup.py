@@ -11,10 +11,10 @@ setup(
     url="https://github.com/kjkoeller/pydebugviz",
     packages=find_packages(),
     install_requires=[
-        "pandas>=2.2",
+        "pandas>=1.4.2",
         "ipywidgets>=8.1",
         "networkx>=3.2",
-        "matplotlib>=3.8"
+        "matplotlib>=3.5.1"
     ],
     python_requires=">=3.7",
     classifiers=[
