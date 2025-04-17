@@ -13,7 +13,7 @@ setup(
     install_requires=[
         "pandas>=1.4.2",
         "ipywidgets>=8.1",
-        "networkx>=3.2",
+        "networkx>=3.0",
         "matplotlib>=3.5.1"
     ],
     python_requires=">=3.7",
