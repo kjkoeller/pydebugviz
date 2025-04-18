@@ -33,8 +33,8 @@ def test_nested_diff_tracking():
             elif isinstance(change, dict):
                 all_keys.append(var)
 
-    found_flag = any("meta.flag" in key for key in all_keys)
-    found_scores = any("scores[2]" in key for key in all_keys)
+    found_flag = any("data.meta.flag" in key for key in all_keys)
+    found_scores = any("data.scores[2]" in key for key in all_keys)
 
-    assert found_flag, "Did not find nested diff for 'meta.flag'"
-    assert found_scores, "Did not find nested diff for 'scores[2]'"
+    assert found_flag, "Did not find nested diff for 'data.meta.flag'"
+    assert found_scores, "Did not find nested diff for 'data.scores[2]'"
