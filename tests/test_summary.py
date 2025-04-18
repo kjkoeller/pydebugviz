@@ -1,4 +1,4 @@
-from pydebugviz import debug
+from pydebugviz import debug, normalize_trace
 from pydebugviz.summary import show_summary
 
 def test_summary_runs(capfd):
