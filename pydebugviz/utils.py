@@ -146,10 +146,7 @@ def safe_deepcopy(obj):
     try:
         return copy.deepcopy(obj)
     except Exception:
-        try:
-            return str(obj)
-        except Exception:
-            return "<unserializable>"
+        return obj
 
 def deepcopy_locals(locals_dict):
     copied = {}
