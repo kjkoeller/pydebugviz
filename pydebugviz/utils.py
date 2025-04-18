@@ -73,10 +73,12 @@ def compute_var_diff(prev, curr):
     for key in set(prev) | set(curr):
         val_a = prev.get(key, "<missing>")
         val_b = curr.get(key, "<missing>")
-        if val_a != val_b:
-            nested = recursive_diff(val_a, val_b, key)
-            if nested:
-                diff[key] = {"nested": nested} if len(nested) > 1 else list(nested.values())[0]
+
+        # ✅ Always call recursive_diff, even if a == b
+        nested = recursive_diff(val_a, val_b, key)
+        if nested:
+            diff[key] = {"nested": nested} if len(nested) > 1 else list(nested.values())[0]
+
     return diff
 
 def normalize_trace(trace: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
