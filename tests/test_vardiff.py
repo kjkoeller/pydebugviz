@@ -1,5 +1,13 @@
 from pydebugviz import debug, show_summary, normalize_trace
 
+def test_manual_diff():
+    a = {"x": {"y": 1}}
+    b = {"x": {"y": 2}}
+    from pydebugviz.utils import compute_var_diff
+    diff = compute_var_diff({"a": a}, {"a": b})
+    import pprint
+    pprint.pprint(diff)
+
 def test_variable_diff_capture(capfd):
     def demo():
         x = 1
