@@ -28,14 +28,55 @@ def truncate_vars(locals_dict: Dict[str, Any], max_len: int = 100) -> Dict[str, 
             truncated[k] = "<unrepr>"
     return truncated
 
-def compute_var_diff(prev: dict, curr: dict) -> dict:
+def compute_var_diff(prev, curr):
+    def is_primitive(x):
+        return isinstance(x, (int, float, str, bool, type(None)))
+
+    def shallow_diff(a, b):
+        return {"from": a, "to": b}
+
+    def recursive_diff(a, b, prefix=""):
+        diffs = {}
+        if type(a) != type(b):
+            diffs[prefix] = shallow_diff(a, b)
+        elif isinstance(a, dict):
+            keys = set(a) | set(b)
+            for key in keys:
+                subkey = f"{prefix}.{key}" if prefix else str(key)
+                if key in a and key in b:
+                    subdiffs = recursive_diff(a[key], b[key], prefix=subkey)
+                    diffs.update(subdiffs)
+                elif key in a:
+                    diffs[subkey] = {"from": a[key], "to": "<deleted>"}
+                else:
+                    diffs[subkey] = {"from": "<missing>", "to": b[key]}
+        elif isinstance(a, list):
+            for i, (ai, bi) in enumerate(zip(a, b)):
+                subkey = f"{prefix}[{i}]"
+                subdiffs = recursive_diff(ai, bi, subkey)
+                diffs.update(subdiffs)
+            if len(a) < len(b):
+                for i in range(len(a), len(b)):
+                    subkey = f"{prefix}[{i}]"
+                    diffs[subkey] = {"from": "<missing>", "to": b[i]}
+            elif len(a) > len(b):
+                for i in range(len(b), len(a)):
+                    subkey = f"{prefix}[{i}]"
+                    diffs[subkey] = {"from": a[i], "to": "<deleted>"}
+        elif is_primitive(a) and a != b:
+            diffs[prefix] = shallow_diff(a, b)
+        elif not is_primitive(a) and str(a) != str(b):
+            diffs[prefix] = shallow_diff(str(a), str(b))
+        return diffs
+
     diff = {}
-    keys = set(prev.keys()).union(curr.keys())
-    for k in keys:
-        v1 = prev.get(k)
-        v2 = curr.get(k)
-        if v1 != v2:
-            diff[k] = {"from": v1, "to": v2}
+    for key in set(prev) | set(curr):
+        val_a = prev.get(key, "<missing>")
+        val_b = curr.get(key, "<missing>")
+        if val_a != val_b:
+            nested = recursive_diff(val_a, val_b, key)
+            if nested:
+                diff[key] = {"nested": nested} if len(nested) > 1 else list(nested.values())[0]
     return diff
 
 def normalize_trace(trace: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
