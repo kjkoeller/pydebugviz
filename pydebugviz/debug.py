@@ -10,9 +10,6 @@ def debug(func, *args,
           max_var_len: int = 100,
           deep_copy: bool = False,  # ✅ new argument
           **kwargs) -> List[Dict]:
-    import sys
-    from pydebugviz.utils_deepcopy import deepcopy_locals
-    from pydebugviz.utils import truncate_vars, validate_expressions
 
     trace = []
     step_count = 0
