@@ -29,7 +29,7 @@ def debug(func, *args,
         step_count += 1
 
         raw_locals = frame.f_locals.copy()
-        copied_raw_locals = deepcopy_locals({"raw_locals": raw_locals}) if deep_copy else raw_locals.copy()
+        copied_raw_locals = deepcopy_locals(raw_locals) if deep_copy else raw_locals.copy()
 
         frame_data = {
             "event": event,
