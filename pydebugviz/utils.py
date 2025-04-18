@@ -81,6 +81,7 @@ def compute_var_diff(prev, curr):
 
 def normalize_trace(trace: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     normalized = []
+
     for i, frame in enumerate(trace):
         norm = {
             "step": i,
@@ -90,12 +91,13 @@ def normalize_trace(trace: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
             "locals": frame.get("locals", {}) or {},
             "annotation": frame.get("annotation", "")
         }
+
         if "return" in frame:
             norm["return"] = frame["return"]
         if "exception" in frame:
             norm["exception"] = frame["exception"]
 
-        # Compute variable diff if raw_locals exist
+        # Compute variable diffs using raw_locals if available
         if i > 0:
             prev_raw = trace[i - 1].get("raw_locals", {})
             curr_raw = frame.get("raw_locals", {})
@@ -104,6 +106,7 @@ def normalize_trace(trace: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
             norm["var_diff"] = {}
 
         normalized.append(norm)
+
     return normalized
 
 def check_trace_schema(trace: List[Dict[str, Any]]) -> List[str]:
