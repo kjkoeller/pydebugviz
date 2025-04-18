@@ -1,13 +1,16 @@
 from typing import List, Dict
 import html
+import webbrowser
+import os
 
-def export_html(trace: List[Dict], filepath: str = "trace.html") -> None:
+def export_html(trace: List[Dict], filepath: str = "trace.html", open_in_browser: bool = True) -> None:
     """
-    Exports the trace to a simple standalone HTML table for inspection.
+    Exports the trace to a simple standalone HTML table for inspection and optionally opens it in a browser.
 
     Args:
         trace (List[Dict]): Normalized trace to export.
         filepath (str): Output HTML file path.
+        open_in_browser (bool): If True, open the file in the default web browser after export.
     """
     with open(filepath, "w", encoding="utf-8") as f:
         f.write("<html><head><title>Trace Export</title>")
@@ -43,3 +46,7 @@ def export_html(trace: List[Dict], filepath: str = "trace.html") -> None:
             f.write("</tr>")
 
         f.write("</table></body></html>")
+
+    if open_in_browser:
+        absolute_path = os.path.abspath(filepath)
+        webbrowser.open(f"file://{absolute_path}")
