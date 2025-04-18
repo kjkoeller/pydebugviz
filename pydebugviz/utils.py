@@ -28,6 +28,16 @@ def truncate_vars(locals_dict: Dict[str, Any], max_len: int = 100) -> Dict[str, 
             truncated[k] = "<unrepr>"
     return truncated
 
+def compute_var_diff(prev: dict, curr: dict) -> dict:
+    diff = {}
+    keys = set(prev.keys()).union(curr.keys())
+    for k in keys:
+        v1 = prev.get(k)
+        v2 = curr.get(k)
+        if v1 != v2:
+            diff[k] = {"from": v1, "to": v2}
+    return diff
+
 def normalize_trace(trace: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     normalized = []
     for i, frame in enumerate(trace):
@@ -43,6 +53,15 @@ def normalize_trace(trace: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
             norm["return"] = frame["return"]
         if "exception" in frame:
             norm["exception"] = frame["exception"]
+
+        # Compute variable diff if raw_locals exist
+        if i > 0:
+            prev_raw = trace[i - 1].get("raw_locals", {})
+            curr_raw = frame.get("raw_locals", {})
+            norm["var_diff"] = compute_var_diff(prev_raw, curr_raw)
+        else:
+            norm["var_diff"] = {}
+
         normalized.append(norm)
     return normalized
 
