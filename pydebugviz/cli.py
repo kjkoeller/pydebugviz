@@ -4,7 +4,6 @@ from pydebugviz import debug, normalize_trace, show_summary, export_html
 from pydebugviz.replay import replay_trace_cli
 
 def load_script_function(script_path):
-    # Dynamically load a function from a Python script
     import runpy
     return runpy.run_path(script_path).get('main')
 
@@ -12,8 +11,11 @@ def main():
     parser = argparse.ArgumentParser(description="pydebugviz - Visual Debugging Tool")
     parser.add_argument("script", help="Python script to trace (must contain a 'main()' function)")
     parser.add_argument("--html", action="store_true", help="Export HTML after trace")
-    parser.add_argument("--play", action="store_true", help="Replay trace in CLI")
-    parser.add_argument("--summary", action="store_true", help="Show CLI summary after trace")
+    parser.add_argument("--summary", action="store_true", help="Show summary in terminal")
+    parser.add_argument("--play", action="store_true", help="Enter interactive replay mode")
+    parser.add_argument("--auto-play", action="store_true", help="Auto-play through trace steps")
+    parser.add_argument("--headless", action="store_true", help="Dump all steps non-interactively")
+    parser.add_argument("--delay", type=float, default=0.5, help="Step delay (for auto-play)")
 
     args = parser.parse_args()
 
@@ -28,8 +30,13 @@ def main():
         if args.html:
             export_html(trace)
 
-        if args.play:
-            replay_trace_cli(trace)
+        if args.play or args.auto_play or args.headless:
+            replay_trace_cli(
+                trace,
+                auto_play=args.auto_play,
+                delay=args.delay,
+                headless=args.headless
+            )
 
     except Exception as e:
         print(f"[pydebugviz] Error: {e}")
