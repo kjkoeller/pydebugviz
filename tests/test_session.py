@@ -22,3 +22,27 @@ def test_navigation_and_bounds():
     session.prev()
     assert session.pointer == 0
 
+def test_session_navigation():
+    def func():
+        x = 0
+        x += 1
+        return x
+
+    trace = debug(func)
+    session = DebugSession(trace)
+
+    session.jump_to(1)
+    assert session.pointer == 1
+    current = session.current()
+    assert isinstance(current, dict)
+    assert "event" in current
+
+def test_session_search():
+    def foo():
+        x = 5
+        return x
+
+    trace = debug(foo)
+    session = DebugSession(trace)
+    matches = session.search("x == 5")
+    assert isinstance(matches, list)
