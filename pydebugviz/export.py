@@ -15,7 +15,7 @@ def export_html(trace: List[Dict], filepath: str = "trace.html") -> None:
         f.write("</head><body><h2>pydebugviz Trace Export</h2>")
         f.write(f"<p>{len(trace)} steps</p><table><tr>")
 
-        headers = ["step", "event", "function", "line_no", "locals", "annotation"]
+        headers = ["step", "event", "function", "line_no", "locals", "annotation", "var_diff"]
         for header in headers:
             f.write(f"<th>{header}</th>")
         f.write("</tr>")
@@ -23,7 +23,22 @@ def export_html(trace: List[Dict], filepath: str = "trace.html") -> None:
         for frame in trace:
             f.write("<tr>")
             for key in headers:
-                value = html.escape(str(frame.get(key, "")))
+                if key == "var_diff":
+                    diff = frame.get("var_diff", {})
+                    if diff:
+                        value = "<br>".join(
+                            f"{html.escape(k)}: {html.escape(str(v['from']))} → {html.escape(str(v['to']))}"
+                            for k, v in diff.items()
+                        )
+                    else:
+                        value = ""
+                elif key == "locals":
+                    value = "<br>".join(
+                        f"{html.escape(k)} = {html.escape(str(v))}"
+                        for k, v in frame.get("locals", {}).items()
+                    )
+                else:
+                    value = html.escape(str(frame.get(key, "")))
                 f.write(f"<td>{value}</td>")
             f.write("</tr>")
 
