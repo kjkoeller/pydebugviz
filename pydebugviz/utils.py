@@ -135,3 +135,20 @@ def check_trace_schema(trace: List[Dict[str, Any]]) -> List[str]:
 
 # Alias for legacy support
 validate_trace = check_trace_schema
+
+
+def safe_deepcopy(obj):
+    try:
+        return copy.deepcopy(obj)
+    except Exception:
+        try:
+            return str(obj)
+        except Exception:
+            return "<unserializable>"
+
+def deepcopy_locals(frame):
+    raw_locals = frame.get("raw_locals", {})
+    copied = {}
+    for key, val in raw_locals.items():
+        copied[key] = safe_deepcopy(val)
+    return copied
