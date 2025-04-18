@@ -149,9 +149,8 @@ def safe_deepcopy(obj):
         except Exception:
             return "<unserializable>"
 
-def deepcopy_locals(frame):
-    raw_locals = frame.get("raw_locals", {})
+def deepcopy_locals(locals_dict):
     copied = {}
-    for key, val in raw_locals.items():
+    for key, val in locals_dict.items():
         copied[key] = safe_deepcopy(val)
     return copied
