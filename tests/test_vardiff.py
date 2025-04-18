@@ -30,6 +30,11 @@ def test_nested_diff_tracking():
         return data
 
     trace = normalize_trace(debug(example, deep_copy=True))
+    
+    import pprint
+    for i, frame in enumerate(trace):
+        print(f"\nSTEP {i}")
+        pprint.pprint(frame.get("var_diff", {}))
 
     # Collect all nested diff keys
     all_keys = []
