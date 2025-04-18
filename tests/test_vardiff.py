@@ -22,15 +22,19 @@ def test_nested_diff_tracking():
         return data
 
     trace = normalize_trace(debug(example, deep_copy=True))
-    nested_diffs = [frame.get("var_diff", {}) for frame in trace if "var_diff" in frame]
 
-    # Confirm that nested keys are diffed
-    found_flag_change = any(
-        "data.meta.flag" in diff.get("data", {}).get("nested", {}) for diff in nested_diffs if isinstance(diff.get("data"), dict)
-    )
-    found_list_append = any(
-        "data.scores[2]" in diff.get("data", {}).get("nested", {}) for diff in nested_diffs if isinstance(diff.get("data"), dict)
-    )
+    # Collect all nested diff keys
+    all_keys = []
+    for frame in trace:
+        var_diff = frame.get("var_diff", {})
+        for var, change in var_diff.items():
+            if isinstance(change, dict) and "nested" in change:
+                all_keys.extend(change["nested"].keys())
+            elif isinstance(change, dict):
+                all_keys.append(var)
 
-    assert found_flag_change, "Did not find nested diff for 'meta.flag'"
-    assert found_list_append, "Did not find nested diff for 'scores[2]'"
+    found_flag = any("meta.flag" in key for key in all_keys)
+    found_scores = any("scores[2]" in key for key in all_keys)
+
+    assert found_flag, "Did not find nested diff for 'meta.flag'"
+    assert found_scores, "Did not find nested diff for 'scores[2]'"
