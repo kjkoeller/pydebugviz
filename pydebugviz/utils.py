@@ -73,10 +73,12 @@ def compute_var_diff(prev, curr):
     for key in set(prev) | set(curr):
         val_a = prev.get(key, "<missing>")
         val_b = curr.get(key, "<missing>")
-        if val_a != val_b:
-            nested = recursive_diff(val_a, val_b, key)
-            if nested:
-                diff[key] = {"nested": nested} if len(nested) > 1 else list(nested.values())[0]
+
+        # ✅ Always call recursive_diff, even if a == b
+        nested = recursive_diff(val_a, val_b, key)
+        if nested:
+            diff[key] = {"nested": nested} if len(nested) > 1 else list(nested.values())[0]
+
     return diff
 
 def normalize_trace(trace: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -144,14 +146,10 @@ def safe_deepcopy(obj):
     try:
         return copy.deepcopy(obj)
     except Exception:
-        try:
-            return str(obj)
-        except Exception:
-            return "<unserializable>"
+        return obj
 
-def deepcopy_locals(frame):
-    raw_locals = frame.get("raw_locals", {})
+def deepcopy_locals(locals_dict):
     copied = {}
-    for key, val in raw_locals.items():
+    for key, val in locals_dict.items():
         copied[key] = safe_deepcopy(val)
     return copied
